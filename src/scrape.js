@@ -7,9 +7,9 @@ import { ytFlatPlaylist, ytVideoMeta } from './ytdlp.js';
 import { channelVideosUrl, displayHandle, mapWithConcurrency } from './utils.js';
 
 /** Pull up to `uploadsPerChannel` newest video ids/urls for one channel. */
-async function pullChannelUploads(handle, { uploadsPerChannel, proxyUrl }) {
+async function pullChannelUploads(handle, { uploadsPerChannel, proxyUrl, cookieFile }) {
     const url = channelVideosUrl(handle);
-    const playlist = await ytFlatPlaylist(url, { playlistEnd: uploadsPerChannel, proxyUrl });
+    const playlist = await ytFlatPlaylist(url, { playlistEnd: uploadsPerChannel, proxyUrl, cookieFile });
     const entries = Array.isArray(playlist?.entries) ? playlist.entries : [];
 
     return entries
@@ -83,11 +83,11 @@ function normalizeMeta(meta, sourceHandle) {
 }
 
 /** Fetch + normalize metadata for every video with bounded concurrency. */
-export async function fetchAllMeta(videos, { concurrency, proxyUrl }) {
+export async function fetchAllMeta(videos, { concurrency, proxyUrl, cookieFile }) {
     let completed = 0;
     const metas = await mapWithConcurrency(videos, concurrency, async (video) => {
         try {
-            const raw = await ytVideoMeta(video.url, { proxyUrl });
+            const raw = await ytVideoMeta(video.url, { proxyUrl, cookieFile });
             completed += 1;
             if (completed % 10 === 0 || completed === videos.length) {
                 log.info(`  metadata ${completed}/${videos.length}`);

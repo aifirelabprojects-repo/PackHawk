@@ -93,6 +93,12 @@
       "description": "Proxy used for the YouTube requests. A residential proxy is recommended at scale to avoid being rate-limited.",
       "editor": "proxy",
       "default": { "useApifyProxy": true }
+    },
+    "youtubeCookies": {
+      "title": "YouTube Cookies (Netscape format)",
+      "type": "string",
+      "description": "Exported YouTube cookies in Netscape format to bypass 'Sign in to confirm you\\'re not a bot' errors. Use an extension like 'Get cookies.txt LOCALLY' to export them.",
+      "editor": "textarea"
     }
   },
   "required": []

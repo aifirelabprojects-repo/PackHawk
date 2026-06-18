@@ -68,6 +68,7 @@ async function runScan(input) {
         breakoutMultiplier = 3,
         metadataConcurrency = 10,
         proxyConfiguration: proxyInput,
+        youtubeCookies,
     } = input;
 
     const handles = (await resolveHandles(competitorHandles)).slice(0, maxChannels);
@@ -83,16 +84,23 @@ async function runScan(input) {
         log.warning('No proxy configured — YouTube may rate-limit datacenter IPs at scale.');
     }
 
+    let cookieFile;
+    if (youtubeCookies && youtubeCookies.trim()) {
+        cookieFile = path.resolve('./youtube-cookies.txt');
+        await fs.writeFile(cookieFile, youtubeCookies.trim(), 'utf8');
+        log.info('Using provided YouTube cookies.');
+    }
+
     const generatedAt = new Date().toISOString().slice(0, 10);
 
     await Actor.setStatusMessage('Phase 1: pulling competitor uploads...');
-    const videos = await pullAllUploads(handles, { uploadsPerChannel, proxyUrl });
+    const videos = await pullAllUploads(handles, { uploadsPerChannel, proxyUrl, cookieFile });
     if (!videos.length) {
         throw new Error('Could not pull any uploads. Check the handles or proxy configuration.');
     }
 
     await Actor.setStatusMessage(`Phase 1: fetching metadata for ${videos.length} videos...`);
-    const metas = await fetchAllMeta(videos, { concurrency: metadataConcurrency, proxyUrl });
+    const metas = await fetchAllMeta(videos, { concurrency: metadataConcurrency, proxyUrl, cookieFile });
     log.info(`Got metadata for ${metas.length}/${videos.length} videos.`);
 
     const { selection, recentCount } = rankAndSelect(metas, { recencyDays, topN, breakoutMultiplier });
