@@ -1,0 +1,9 @@
+{
+  "actorSpecification": 1,
+  "name": "packhawk-youtube-packaging-scout",
+  "title": "PackHawk — YouTube Competitor Packaging Scout",
+  "description": "LLM-free engine for AI/MCP agents: scrapes competitors' recent YouTube uploads and ranks the winners (scan), then assembles the AI's packaging breakdowns into a self-contained HTML report (report).",
+  "version": "0.1",
+  "input": "./input_schema.json",
+  "dockerfile": "../Dockerfile"
+}

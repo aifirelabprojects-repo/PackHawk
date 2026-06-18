@@ -1,0 +1,14 @@
+{
+  "name": "packhawk-youtube-packaging-scout",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "LLM-free Apify Actor (built for AI/MCP agents) that scrapes competitors' recent YouTube uploads and ranks the winners, then assembles the AI's packaging breakdowns into a self-contained HTML report.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js"
+  },
+  "dependencies": {
+    "apify": "^3.3.0",
+    "youtube-dl-exec": "^3.1.7"
+  }
+}

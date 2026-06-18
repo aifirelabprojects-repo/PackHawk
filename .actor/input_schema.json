@@ -1,0 +1,99 @@
+{
+  "title": "PackHawk — YouTube Competitor Packaging Scout",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "operation": {
+      "title": "Operation",
+      "type": "string",
+      "description": "scan = scrape + rank competitors and return the winning picks (default). report = assemble the AI's packaging breakdowns into a self-contained HTML report.",
+      "enum": ["scan", "report"],
+      "enumTitles": ["Scan & rank competitors", "Build HTML report"],
+      "default": "scan",
+      "editor": "select"
+    },
+    "competitorHandles": {
+      "title": "Competitor channels (scan)",
+      "type": "array",
+      "description": "YouTube @handles or channel URLs of the competitors to scan. Only the first 'Max channels' are used. If empty, the actor looks for a competitor-list.md file in the working directory (handy for local runs).",
+      "editor": "stringList",
+      "prefill": ["@mkbhd", "@MrBeast"],
+      "example": ["@mkbhd", "@MrBeast"]
+    },
+    "maxChannels": {
+      "title": "Max channels (scan)",
+      "type": "integer",
+      "description": "How many of the provided handles to actually scan.",
+      "minimum": 1,
+      "maximum": 20,
+      "default": 5,
+      "editor": "number"
+    },
+    "uploadsPerChannel": {
+      "title": "Uploads per channel (scan)",
+      "type": "integer",
+      "description": "How many of each channel's newest uploads to pull (used for ranking and to compute the channel's view median for the breakout score).",
+      "minimum": 1,
+      "maximum": 50,
+      "default": 20,
+      "editor": "number"
+    },
+    "recencyDays": {
+      "title": "Recency window in days (scan)",
+      "type": "integer",
+      "description": "Only videos published within this many days are eligible to be selected as winners.",
+      "minimum": 1,
+      "maximum": 90,
+      "default": 7,
+      "editor": "number"
+    },
+    "topN": {
+      "title": "Top N by views/day (scan)",
+      "type": "integer",
+      "description": "How many recent videos to select purely by views-per-day. Breakout outliers are added on top of these.",
+      "minimum": 1,
+      "maximum": 20,
+      "default": 3,
+      "editor": "number"
+    },
+    "breakoutMultiplier": {
+      "title": "Breakout multiplier (scan)",
+      "type": "integer",
+      "description": "Any recent video whose views exceed this multiple of its channel's median views is also selected as a breakout outlier (e.g. 3 = more than 3x the channel median).",
+      "minimum": 2,
+      "maximum": 20,
+      "default": 3,
+      "editor": "number"
+    },
+    "metadataConcurrency": {
+      "title": "Metadata concurrency (scan)",
+      "type": "integer",
+      "description": "How many video-metadata fetches to run in parallel.",
+      "minimum": 1,
+      "maximum": 30,
+      "default": 10,
+      "editor": "number"
+    },
+    "reportData": {
+      "title": "Report data (report)",
+      "type": "object",
+      "description": "For operation=report. The scan output augmented by the AI: { pattern: string, picks: [ { ...pick, analysis: {...} } ], handles?, recencyDays?, totalVideosAnalyzed? }.",
+      "editor": "json"
+    },
+    "openReportLocally": {
+      "title": "Open report locally (report)",
+      "type": "boolean",
+      "description": "On local runs only, open the generated HTML report in your default browser. Ignored on the Apify platform.",
+      "default": true,
+      "editor": "checkbox"
+    },
+    "proxyConfiguration": {
+      "title": "Proxy configuration",
+      "type": "object",
+      "description": "Proxy used for the YouTube requests. A residential proxy is recommended at scale to avoid being rate-limited.",
+      "editor": "proxy",
+      "default": { "useApifyProxy": true }
+    }
+  },
+  "required": []
+}
