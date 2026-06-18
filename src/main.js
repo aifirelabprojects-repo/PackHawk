@@ -85,10 +85,11 @@ async function runScan(input) {
     }
 
     let cookieFile;
-    if (youtubeCookies && youtubeCookies.trim()) {
+    const finalCookies = youtubeCookies || process.env.YOUTUBE_COOKIES;
+    if (finalCookies && finalCookies.trim()) {
         cookieFile = path.resolve('./youtube-cookies.txt');
-        await fs.writeFile(cookieFile, youtubeCookies.trim(), 'utf8');
-        log.info('Using provided YouTube cookies.');
+        await fs.writeFile(cookieFile, finalCookies.trim(), 'utf8');
+        log.info('Using provided YouTube cookies (from input or environment).');
     }
 
     const generatedAt = new Date().toISOString().slice(0, 10);
