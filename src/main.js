@@ -87,8 +87,12 @@ async function runScan(input) {
     let cookieFile;
     const finalCookies = youtubeCookies || process.env.YOUTUBE_COOKIES;
     if (finalCookies && finalCookies.trim()) {
+        let cookieContent = finalCookies.trim();
+        if (!cookieContent.includes('# Netscape HTTP Cookie File')) {
+            cookieContent = '# Netscape HTTP Cookie File\n\n' + cookieContent;
+        }
         cookieFile = path.resolve('./youtube-cookies.txt');
-        await fs.writeFile(cookieFile, finalCookies.trim(), 'utf8');
+        await fs.writeFile(cookieFile, cookieContent, 'utf8');
         log.info('Using provided YouTube cookies (from input or environment).');
     }
 

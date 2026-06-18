@@ -92,8 +92,18 @@ You can customize how PackHawk runs. Here are the main knobs you can turn:
 | `topN` | `scan` | `3` | How many top winners to pick. |
 | `breakoutMultiplier` | `scan` | `3` | How much better than average a video needs to be to be considered a "breakout." |
 | `metadataConcurrency`| `scan` | `10` | How many videos to fetch at the same time. |
+| `youtubeCookies` | `scan` | — | Netscape format cookies to bypass YouTube bot detection. Fallback: `YOUTUBE_COOKIES` env var. |
 | `reportData` | `report`| — | The payload containing the AI's analysis for the final report. |
 | `openReportLocally` | `report`| `true` | Automatically opens the HTML report when running locally. |
+
+---
+
+### Bypassing YouTube Bot Detection
+
+If YouTube blocks the scraper with a "Sign in to confirm you're not a bot" error, you can provide authenticated YouTube cookies:
+1. Export your cookies from YouTube in **Netscape format** using a browser extension (like *Get cookies.txt LOCALLY*).
+2. Pass the cookie string to the Actor via the `youtubeCookies` input field.
+3. **Alternatively**, you can set the `YOUTUBE_COOKIES` environment variable (useful for Docker or `.env` setups). The actor will automatically detect and use these cookies for all `yt-dlp` requests.
 
 ---
 
